@@ -1,0 +1,37 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.3.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+version = '1.0.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+ext {
+	springCloudServiceBrokerVersion = "1.0.1.RELEASE"
+}
+
+repositories {
+	mavenCentral()
+	maven { url "http://repo.spring.io/libs-milestone" }
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.cloud:spring-cloud-cloudfoundry-service-broker:${springCloudServiceBrokerVersion}")
+	compile("redis.clients:jedis")
+	compile 'org.springframework.data:spring-data-redis'
+	compile 'org.springframework.cloud:spring-cloud-cloudfoundry-connector'
+	compile 'org.springframework.cloud:spring-cloud-spring-service-connector'
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}

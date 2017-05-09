@@ -1,0 +1,71 @@
+# This is an approach to generating Cloud Foundry https://docs.cloudfoundry.org/devguide/services/user-provided.html[Custom User Provided Service] with support for being able to tag such services.
+
+
+# Issue
+This service broker tries to provide a solution to a very common issue when deploying an application(esp Spring Boot based) to Cloud Foundry - being able to tag Custom User Provided Services. 
+There are connectors which get activated by the presence of a tag and since tags cannot be set for custom user provided services, it becomes tricky for some connectors to be activated.
+
+# How does this project help
+This project is a service broker that can set with the json structure of a CUPS by passing information as parameters during service creation. 
+Since it is a normal CF service, tags can be attached to it, but the credentials returned will be whatever the user has set for it.
+
+for eg. consider a CUPS defined this way:
+
+[source, java]
+----
+cf cups SERVICE_INSTANCE -p '{"username":"admin","password":"pa55woRD"}'
+----
+
+The same thing can be defined using the broker this way, with two tags attached to it:
+
+[source, java]
+----
+cf create-service cups-tagging-service default mycups -c '{"username":"admin","password":"pa55woRD"}' -t "tag1, tag2"
+----
+
+
+# Registering the Service Broker
+
+## Create Redis Store
+The application is a simple Spring Boot application and uses Redis to store the state, so just create a redis service first,
+
+[source, java]
+----
+cf create-service p-redis shared-vm cups-tagging-redis
+----
+
+## Push the app:
+
+[source, java]
+----
+cf push
+----
+
+## Register the Broker
+
+[source, java]
+----
+cf create-service-broker cups-tagging-broker none none https://cups-tagging-broker.local.pcfdev.io
+----
+
+## Enable Access to the Service
+
+[source, java]
+----
+cf enable-service-access cups-tagging-service
+----
+
+
+# Using it with an app
+
+[source, java]
+----
+cf create-service cups-tagging-service default mycups -c '{"username":"admin","password":"pa55woRD"}' -t "tag1, tag2"
+----
+
+and bind to the app:
+
+[source, java]
+----
+cf bind-service myapp mycups
+----

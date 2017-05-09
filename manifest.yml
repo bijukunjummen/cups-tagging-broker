@@ -1,0 +1,16 @@
+---
+applications:
+  - name: cups-tagging-broker
+    path: build/libs/cups-tagging-broker-1.0.0-SNAPSHOT.jar 
+    memory: 1G
+    env:
+      JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom
+      SPRING_PROFILES_ACTIVE: cloud
+
+buildpack: https://github.com/cloudfoundry/java-buildpack.git
+
+env:
+    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
+    
+services:
+  - cups-tagging-redis
