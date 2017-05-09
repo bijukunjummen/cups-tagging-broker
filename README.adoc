@@ -1,4 +1,6 @@
-# This is an approach to generating Cloud Foundry https://docs.cloudfoundry.org/devguide/services/user-provided.html[Custom User Provided Service] with support for being able to tag such services.
+# Cloud Foundry CUPS tagging service broker
+
+This is an approach to generating Cloud Foundry https://docs.cloudfoundry.org/devguide/services/user-provided.html[Custom User Provided Service] with support for being able to tag such services.
 
 
 # Issue
